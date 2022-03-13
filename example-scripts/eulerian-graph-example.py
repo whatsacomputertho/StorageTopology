@@ -1,4 +1,4 @@
-from StorageTopology import Node, Edge, Object, StorageTopology
+from StorageTopology.StorageTopology import StorageTopology
 import sympy as sp
 import matplotlib.pyplot as plt
 import csv, math, random, numpy, networkx
@@ -40,6 +40,6 @@ topology = StorageTopology(capacities=caps, num_nodes=nodes, num_objects=3, weig
 #TODO: Create best erasure coded allocation
 allocation = [[1, 0, 0], [0, 1, 0], [1, 1, 1], [1, 0, 0], [0, 1, 0], [0, 0, 1], [1, 0, 0], [0, 0, 1]]
 topology.allocate_coded_objects(allocation)
-avg_lat = topology.calculate_average_coded_latency()
+avg_lat = topology.calculate_global_average_latency()
 print("Erasure coded average latency: " + str(avg_lat))
 print("Erasure coded allocation: " + str(topology.get_allocation()))
