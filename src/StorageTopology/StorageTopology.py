@@ -347,6 +347,7 @@ class StorageTopology:
         return weight_sum / len(self.nodes)
 
     #Public function that generates G' as a networkx graph
+    #See Algorithm 4.3.1 in Storage Latency Tradeoffs in Geographically Distributed Storage Settings for info.
     def generate_modified_retrieval_graph(self):
         g = networkx.Graph()
         g.add_nodes_from(self.nodes)
@@ -426,7 +427,7 @@ class StorageTopology:
         return (latency_sum / len(self.objects))
 
     #Public function that calculates the local worst case latency of a given node.
-    def calculate_worst_case_coded_latency_by_node(self, node):
+    def calculate_worst_case_latency_by_node(self, node):
         min_latencies = self.__calculate_minimum_retrieval_latencies_by_node(node)
         worst_case_latency = min_latencies[0]
         for f in min_latencies:
@@ -435,22 +436,22 @@ class StorageTopology:
         return worst_case_latency
 
     #Private function which generates a list of local worst case latencies (i.e. for each node)
-    def __calculate_worst_case_coded_latencies(self):
+    def __calculate_local_worst_case_latencies(self):
         min_latencies = []
         for node in self.nodes:
-            min_latencies.append(self.calculate_worst_case_coded_latency_by_node(node))
+            min_latencies.append(self.calculate_worst_case_latency_by_node(node))
         return min_latencies
 
     #Private function which generates a list of average latencies (i.e. for each node)
-    def __calculate_average_coded_latencies(self):
+    def __calculate_local_average_latencies(self):
         average_latencies = []
         for node in self.nodes:
             average_latencies.append(self.calculate_average_latency_by_node(node))
         return average_latencies
 
     #Public function which generates the global worst case latency of the distributed data store
-    def calculate_worst_case_coded_latency(self):
-        worst_case_latencies = self.__calculate_worst_case_coded_latencies()
+    def calculate_global_worst_case_latency(self):
+        worst_case_latencies = self.__calculate_local_worst_case_latencies()
         worst_case_latency = worst_case_latencies[0]
         for f in worst_case_latencies:
             if f > worst_case_latency:
@@ -458,9 +459,9 @@ class StorageTopology:
         return worst_case_latency
 
     #Public function which generates the global average latency of the distributed data store
-    def calculate_average_coded_latency(self):
+    def calculate_global_average_latency(self):
         latency_sum = 0.0
-        average_coded_latencies = self.__calculate_average_coded_latencies()
+        average_coded_latencies = self.__calculate_local_average_latencies()
         for f in average_coded_latencies:
             latency_sum += f
         return (latency_sum / len(average_coded_latencies))

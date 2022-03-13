@@ -1,4 +1,4 @@
-from StorageTopology import *
+from StorageTopology.StorageTopology import StorageTopology
 import sympy as sp
 import matplotlib.pyplot as plt
 import csv, math, random, numpy, networkx
@@ -81,14 +81,14 @@ for j in range(3, 20):
             allocations.append(allocation)
         
         #Check all replicative allocations for optimal allocation
-        #allocations = topology.filter_feasible_replicative_allocations(topology.generate_all_replicative_allocations())
+        #allocations = topology.generate_feasile_replicative_allocations()
         for allocation in allocations:
             topology.allocate_coded_objects(allocation)
             #alloc_id = index
             #alloc = topology.get_allocation()
             #print(allocation)
-            #wc_lat = topology.calculate_worst_case_coded_latency()
-            avg_lat = topology.calculate_average_coded_latency()
+            #wc_lat = topology.calculate_global_worst_case_latency()
+            avg_lat = topology.calculate_global_average_latency()
             #line = "{alloc_id},{allocation},{wc_lat},{avg_lat}".format(alloc_id = alloc_id, allocation = topology.get_allocation(), wc_lat = wc_lat, avg_lat = avg_lat)
             if avg_lat <= average:
                 index_found = index
